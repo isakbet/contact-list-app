@@ -1,18 +1,31 @@
 import React from "react";
+import ContactCard from "./ContactCard";
 import "./style.css";
 
-const App = () => { 
+const App = () => {
+  const [contacts, setContacts] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch("https://randomuser.me/api/?results=3")
+      .then(response => response.json())
+      .then(data => {
+        setContacts(data.results);
+      });
+  }, []);
 
   return (
-    <div className="contact-card">
-      <img src="https://via.placeholder.com/150" alt="profile" />
-      <div className="user-details">
-        <p>Name: Jenny Han</p>
-        <p>Email: Jenny.Han@notreal.com</p>
-        <p>Age: 25</p>
-      </div>
-    </div>
+    <>
+      {contacts.map(contact => (
+        <ContactCard
+          avatar={contact.picture.large}
+          name={contact.name.first + " " + contact.name.last}
+          email={contact.email}
+          age={contact.dob.age}
+        />
+      ))}
+    </>
   );
-}
+};
+
 
 export default App;
